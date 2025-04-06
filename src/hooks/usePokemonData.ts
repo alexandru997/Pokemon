@@ -1,4 +1,3 @@
-// File: src/hooks/usePokemonData.ts
 import { useDebounce } from 'use-debounce';
 import {
     useGetAllTypesQuery,
@@ -6,10 +5,11 @@ import {
     useGetPokemonByTypeQuery,
     useGetPokemonListQuery,
 } from '../features/pokemonAPI';
+import { PokemonRow } from "../types/types.ts";
 
 export function usePokemonData(search: string, typeFilter: string, page: number, pageSize: number) {
     const offset = page * pageSize;
-    const [debouncedSearch] = useDebounce(search, 1500);
+    const [debouncedSearch , {isPending}] = useDebounce(search, 1500);
 
     const searchedPokemonQuery = useGetPokemonByNameQuery(debouncedSearch.toLowerCase(), {
         skip: debouncedSearch === '' || !!typeFilter,
@@ -25,11 +25,11 @@ export function usePokemonData(search: string, typeFilter: string, page: number,
 
     const { data: typeOptions = [] } = useGetAllTypesQuery();
 
-    let displayedRows: any[] = [];
+    let displayedRows: PokemonRow[] = [];
     let totalCount = 0;
 
     if (typeFilter && typeFilteredQuery.data) {
-        const filteredBySearch = typeFilteredQuery.data.filter((pokemon: any) =>
+        const filteredBySearch = typeFilteredQuery.data.filter((pokemon) =>
             pokemon.name.toLowerCase().includes(debouncedSearch.toLowerCase())
         );
 
@@ -50,7 +50,7 @@ export function usePokemonData(search: string, typeFilter: string, page: number,
 
     return {
         debouncedSearch,
-        isPending: pokemonListQuery.isFetching || searchedPokemonQuery.isFetching,
+        isPending: pokemonListQuery.isFetching || searchedPokemonQuery.isFetching || isPending(),
         isSearchError: searchedPokemonQuery.isError,
         displayedRows,
         totalCount,

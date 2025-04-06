@@ -1,63 +1,14 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {
+    Pokemon,
+    PokemonAbility,
+    PokemonListParams,
+    PokemonListResponse, PokemonMove,
+    PokemonStat,
+    PokemonType, PokemonTypeOption, TypeListResponse
+} from "../types/types.ts";
 
-interface Pokemon {
-    id: number;
-    name: string;
-    types: string[];
-    sprite: string;
-    abilities?: string[];
-    moves?: string[];
-    stats?: {
-        name: string;
-        value: number;
-    }[]
-}
 
-interface PokemonListResponse {
-    count: number;
-    results: Pokemon[];
-}
-
-interface PokemonType {
-    type: {
-        name: string;
-    };
-}
-
-interface PokemonAbility {
-    ability: {
-        name: string;
-    };
-}
-
-interface PokemonStat {
-    stat: {
-        name: string;
-    };
-    base_stat: number;
-}
-
-interface PokemonMove {
-    move: {
-        name: string;
-    };
-}
-
-interface PokemonListParams {
-    limit: number;
-    offset?: number;
-    search?: string;
-}
-
-interface PokemonTypeOption {
-    name: string;
-    url: string;
-}
-
-interface TypeListResponse {
-    count: number;
-    results: PokemonTypeOption[];
-}
 
 export const pokemonApi = createApi({
     reducerPath: 'pokemonApi',
@@ -73,7 +24,6 @@ export const pokemonApi = createApi({
                     baseResponse.results.map(async (pokemon): Promise<Pokemon> => {
                         const res = await fetch(pokemon.url);
                         const data = await res.json();
-
                         return {
                             id: data.id,
                             name: data.name,
@@ -88,9 +38,6 @@ export const pokemonApi = createApi({
                     results: detailed,
                 };
             },
-        }),
-        getPokemonById: builder.query<Pokemon, number>({
-            query: (id) => `pokemon/${id}`,
         }),
 
         getPokemonByName: builder.query<Pokemon, string>({
@@ -142,7 +89,6 @@ export const pokemonApi = createApi({
             },
         }),
 
-
         getAllTypes: builder.query<PokemonTypeOption[], void>({
             query: () => 'type',
             transformResponse: (response: TypeListResponse) => response.results,
@@ -153,7 +99,6 @@ export const pokemonApi = createApi({
 
 export const {
     useGetPokemonListQuery,
-    useGetPokemonByIdQuery,
     useGetPokemonByNameQuery,
     useGetPokemonByTypeQuery,
     useGetAllTypesQuery
