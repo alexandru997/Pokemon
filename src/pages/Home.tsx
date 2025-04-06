@@ -1,4 +1,4 @@
-import PokemonTable from "../components/Datable.tsx";
+import PokemonTable from "../components/PokemonTable.tsx";
 import { MainImage } from "../assets";
 import { Box } from "@mui/material";
 
