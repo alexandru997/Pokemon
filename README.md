@@ -80,17 +80,5 @@ export default tseslint.config({
 });
 ```
 
----
 
-## 🧪 Future Improvements
-$1✅ Pokémon detail page with abilities, stats, and moves (implemented)
-- Improve mobile responsiveness
-- Batch-fetch types for server-side filtering
-- Add tests with React Testing Library or Vitest
-
----
-
-## 📜 License
-
-This project is open-source and available under the MIT License.
 
